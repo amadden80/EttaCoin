@@ -55,7 +55,9 @@
     <div id="stage">
     </div>
     <script type="text/javascript">
-const marketCap = 13;
+const circulation = 15;
+const totalInvestment = 1500;
+
 const coins = [
   {
     name: 'HempCoin',
@@ -107,6 +109,11 @@ const coins = [
     count: 183,
     cost: 80,
   },
+  {
+    name: 'VeChain',
+    count: 18,
+    cost: 80,
+  },
 ];
 
 function round(value, decimals) {
@@ -116,12 +123,11 @@ function round(value, decimals) {
 const boughtSum = coins.reduce((acc, curr) => acc + curr.cost, 0);
 
 const getStats = () => {
-
   const template = document.querySelector('#template');
   const cln = template.cloneNode(true);
-  cln.removeAttribute('template')
-  cln.style.display='block';
-  document.querySelector('#stage').prepend(cln)
+  cln.removeAttribute('template');
+  cln.style.display = 'block';
+  document.querySelector('#stage').prepend(cln);
 
   const coinFetches = Promise.all(
     coins.map(({ name, count, cost }) => {
@@ -135,16 +141,16 @@ const getStats = () => {
           const obj = objA[0];
 
           return {
-            "24h": obj.percent_change_24h,
-            "1h": obj.percent_change_1h,
-            "7d": obj.percent_change_7d,
+            '24h': obj.percent_change_24h,
+            '1h': obj.percent_change_1h,
+            '7d': obj.percent_change_7d,
             price_btc: obj.price_btc,
             price_usd: obj.price_usd,
             symbol: obj.symbol,
             cost,
             total: count * parseFloat(obj.price_usd),
-            x : count * parseFloat(obj.price_usd) / cost,
-          }
+            x: count * parseFloat(obj.price_usd) / cost,
+          };
         });
     })
   ).then(coins => {
@@ -152,44 +158,50 @@ const getStats = () => {
     const x = sum / boughtSum;
 
     setTimeout(() => {
-      console.table(coins)
-      console.log({cost: boughtSum, sum, x});
+      console.table(coins);
+      console.log({ cost: boughtSum, sum, x });
     }, 500);
 
     setTimeout(() => {
-      cln.querySelector('.time').innerText = (new Date()).toLocaleTimeString();
-    }, 250)
+      cln.querySelector('.time').innerText = new Date().toLocaleTimeString();
+    }, 250);
+
+    const intestOff = totalInvestment - boughtSum;
+
     setTimeout(() => {
-      cln.querySelector('.total').innerText = `$${round(sum/marketCap, 2).toFixed(2)}`;
-    }, 1250)
+      cln.querySelector('.total').innerText = `$${round(
+        (sum + intestOff) / circulation,
+        2
+      ).toFixed(2)}`;
+    }, 1250);
+    1400;
     setTimeout(() => {
-      cln.querySelector('.change').innerText = `(${round(x, 5)}x)`;
-    }, 1000)
+      cln.querySelector('.change').innerText = `(${round(x, 3)}x)`;
+    }, 1000);
   });
-}
+};
 
 const delay = 1000 * 60 * 5;
 let timer = delay;
 getStats();
 setInterval(() => {
   getStats();
-  resetTimer()
-}, delay)
+  resetTimer();
+}, delay);
 
 const resetTimer = () => {
   timer = delay;
-  document.body.style.backgroundColor = "#"+((1<<24)*Math.random()|0).toString(16) + '55';
-}
-  
-
+  document.body.style.backgroundColor =
+    '#' + (((1 << 24) * Math.random()) | 0).toString(16) + '55';
+};
 
 const timerDelay = 250;
 setInterval(() => {
-  timer = timer-timerDelay;
-  document.querySelector('#timer').innerText = `...next: ${Math.floor(timer/1000)}`;
-}, timerDelay)
-
-
+  timer = timer - timerDelay;
+  document.querySelector('#timer').innerText = `...next: ${Math.floor(
+    timer / 1000
+  )}`;
+}, timerDelay);
 </script>
   </body>
 </html>
