@@ -117,7 +117,17 @@ const coins = [
   {
     name: 'Bowhead',
     count: 76.9,
-    cost: 80,
+    cost: 75,
+  },
+  {
+    name: 'EOS',
+    count: 10,
+    cost: 100,
+  },
+  {
+    name: 'Stellar',
+    count: 145,
+    cost: 100,
   },
 ];
 
@@ -165,7 +175,7 @@ const getStats = () => {
 
     setTimeout(() => {
       console.table(coins);
-      console.log({ cost: boughtSum, sum, x });
+      console.log({ cost: boughtSum, sum, x, missing: totalInvestment - boughtSum  });
     }, 500);
 
     setTimeout(() => {
