@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>LPS</title>
+    <style media="screen">
+
+      .total {
+        display:inline-block;
+        padding: 0.5em;
+        height: 1.5em;
+        width: 6em;
+        text-align: center;
+      }
+      .change {
+        display:inline-block;
+        padding: 0.5em;
+        height: 1.5em;
+        width: 6em;
+        text-align: center;
+      }
+      .time {
+        display:inline-block;
+        padding: 0.5em;
+        height: 1.5em;
+        width: 6em;
+        text-align: center;
+      }
+      .tongue {
+        font-size: 0.85em;
+      }
+
+    </style>
+  </head>
+  <body>
+    <h2>
+      <span>EttaCoin (LPS)<span>
+    </h2>
+    <p id="timer">
+    </p>
+    <div style="display:none" id="template">
+      <p class='time'>
+        ...loading
+      </p>
+      <h3 class='total'>
+        <span class="tongue">
+          &#128069;
+        </span>
+      </h3>
+      <p class='change'>
+        ...loading
+      </p>
+    </div>
+    <div id="stage">
+    </div>
+    <script type="text/javascript">
+const marketCap = 13;
+const coins = [
+  {
+    name: 'HempCoin',
+    count: 140,
+    cost: 83.09,
+  },
+  {
+    name: 'Ripple',
+    count: 30,
+    cost: 79.13,
+  },
+  {
+    name: 'Cardano',
+    count: 150,
+    cost: 154.74,
+  },
+  {
+    name: 'Enigma',
+    count: 10,
+    cost: 63.87,
+  },
+  {
+    name: 'Salt',
+    count: 10,
+    cost: 128.73,
+  },
+  {
+    name: 'Modum',
+    count: 13.78,
+    cost: 80,
+  },
+  {
+    name: 'Aion',
+    count: 9.71,
+    cost: 80,
+  },
+  {
+    name: 'Substratum',
+    count: 47,
+    cost: 80,
+  },
+  {
+    name: 'Amber',
+    count: 71,
+    cost: 75,
+  },
+  {
+    name: 'Monetha',
+    count: 183,
+    cost: 80,
+  },
+];
+
+function round(value, decimals) {
+  return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
+}
+
+const boughtSum = coins.reduce((acc, curr) => acc + curr.cost, 0);
+
+const getStats = () => {
+
+  const template = document.querySelector('#template');
+  const cln = template.cloneNode(true);
+  cln.removeAttribute('template')
+  cln.style.display='block';
+  document.querySelector('#stage').prepend(cln)
+
+  const coinFetches = Promise.all(
+    coins.map(({ name, count, cost }) => {
+      const coinName = name.toLowerCase();
+
+      return fetch(
+        `https://api.coinmarketcap.com/v1/ticker/${coinName}/?convert=USD`
+      )
+        .then(res => res.json())
+        .then(objA => {
+          const obj = objA[0];
+
+          return {
+            "24h": obj.percent_change_24h,
+            "1h": obj.percent_change_1h,
+            "7d": obj.percent_change_7d,
+            price_btc: obj.price_btc,
+            price_usd: obj.price_usd,
+            symbol: obj.symbol,
+            cost,
+            total: count * parseFloat(obj.price_usd),
+            x : count * parseFloat(obj.price_usd) / cost,
+          }
+        });
+    })
+  ).then(coins => {
+    const sum = coins.reduce((acc, curr) => acc + curr.total, 0);
+    const x = sum / boughtSum;
+
+    setTimeout(() => {
+      console.table(coins)
+      console.log({cost: boughtSum, sum, x});
+    }, 500);
+
+    setTimeout(() => {
+      cln.querySelector('.time').innerText = (new Date()).toLocaleTimeString();
+    }, 250)
+    setTimeout(() => {
+      cln.querySelector('.total').innerText = `$${round(sum/marketCap, 2).toFixed(2)}`;
+    }, 1250)
+    setTimeout(() => {
+      cln.querySelector('.change').innerText = `(${round(x, 5)}x)`;
+    }, 1000)
+  });
+}
+
+const delay = 1000 * 60 * 5;
+let timer = delay;
+getStats();
+setInterval(() => {
+  getStats();
+  resetTimer()
+}, delay)
+
+const resetTimer = () => {
+  timer = delay;
+}
+
+const timerDelay = 250;
+setInterval(() => {
+  timer = timer-timerDelay;
+  document.querySelector('#timer').innerText = `...next: ${Math.floor(timer/1000)}`;
+}, timerDelay)
+
+
+</script>
+  </body>
+</html>
