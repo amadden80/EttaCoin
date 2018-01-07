@@ -75,7 +75,7 @@ const coins = [
     cost: 154.74,
   },
   {
-    name: 'Enigma',
+    name: 'Enigma-Project',
     count: 10,
     cost: 63.87,
   },
@@ -114,6 +114,11 @@ const coins = [
     count: 18,
     cost: 80,
   },
+  {
+    name: 'Bowhead',
+    count: 76.9,
+    cost: 80,
+  },
 ];
 
 function round(value, decimals) {
@@ -148,6 +153,7 @@ const getStats = () => {
             price_usd: obj.price_usd,
             symbol: obj.symbol,
             cost,
+            count,
             total: count * parseFloat(obj.price_usd),
             x: count * parseFloat(obj.price_usd) / cost,
           };
