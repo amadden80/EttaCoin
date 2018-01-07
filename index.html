@@ -31,6 +31,12 @@
         font-size: 0.85em;
       }
 
+      #header *{
+        color: grey;
+        text-decoration: underline;
+        padding-bottom: 0.1em;
+      }
+
     </style>
   </head>
   <body>
@@ -40,23 +46,74 @@
     <p id="timer">
     </p>
     <div style="display:none" id="template">
-      <p class='time'>
-        ...loading
-      </p>
-      <h3 class='total'>
-        <span class="tongue">
-          &#128069;
-        </span>
-      </h3>
-      <p class='change'>
-        ...loading
-      </p>
+      <span class="one-lsp">
+        <p class='time'>
+          ...loading
+        </p>
+        <p class='change'>
+          ...loading
+        </p>
+        <h3 class='total'>
+          <span class="tongue">
+            &#128069;
+          </span>
+        </h3>
+      </span>
+      <span class="two-lsp">
+        <h3 class='total'>
+          <span class="tongue">
+            &#128069;
+          </span>
+        </h3>
+      </span>
+      <span class="three-lsp">
+        <h3 class='total'>
+          <span class="tongue">
+            &#128069;
+          </span>
+        </h3>
+      </span>
+      <span class="total-lsp">
+        <h3 class='total'>
+          <span class="tongue">
+            &#128069;
+          </span>
+        </h3>
+      </span>
+    </div>
+    <div id='header'>
+      <span class="one-lsp">
+        <p class='time'>
+          Time
+        </p>
+        <p class='change'>
+          Change
+        </p>
+        <h3 class='total'>
+          1 LSP
+        </h3>
+      </span>
+      <span class="two-lsp">
+        <h3 class='total'>
+          2 LSP
+        </h3>
+      </span>
+      <span class="three-lsp">
+        <h3 class='total'>
+          3 LSP
+        </h3>
+      </span>
+      <span class="total-lsp">
+        <h3 class='total'>
+          Total
+        </h3>
+      </span>
     </div>
     <div id="stage">
     </div>
     <script type="text/javascript">
-const circulation = 15;
-const totalInvestment = 1500;
+const circulation = 16;
+const totalInvestment = 1600;
 
 const coins = [
   {
@@ -185,15 +242,41 @@ const getStats = () => {
     const intestOff = totalInvestment - boughtSum;
 
     setTimeout(() => {
-      cln.querySelector('.total').innerText = `$${round(
+      cln.querySelector('.one-lsp .total').innerText = `$${round(
         (sum + intestOff) / circulation,
         2
       ).toFixed(2)}`;
     }, 1250);
     1400;
     setTimeout(() => {
-      cln.querySelector('.change').innerText = `(${round(x, 3)}x)`;
+      cln.querySelector('.one-lsp .change').innerText = `(${round(x, 3)}x)`;
     }, 1000);
+
+    setTimeout(() => {
+      cln.querySelector('.two-lsp .total').innerText = `$${round(
+        (2 * (sum + intestOff)) / circulation,
+        2
+      ).toFixed(2)}`;
+    }, 1250);
+    1400;
+
+    setTimeout(() => {
+      cln.querySelector('.three-lsp .total').innerText = `$${round(
+        (3 * (sum + intestOff)) / circulation,
+        2
+      ).toFixed(2)}`;
+    }, 1250);
+    1400;
+
+    setTimeout(() => {
+      document.querySelector('#header .total-lsp .total').innerText = `${circulation} LPS`;
+      cln.querySelector('.total-lsp .total').innerText = `$${round(
+        (circulation * (sum + intestOff)) / circulation,
+        2
+      ).toFixed(2)}`;
+    }, 1250);
+    1400;
+
   });
 };
 
