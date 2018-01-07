@@ -178,7 +178,10 @@ setInterval(() => {
 
 const resetTimer = () => {
   timer = delay;
+  document.body.style.backgroundColor = "#"+((1<<24)*Math.random()|0).toString(16) + '55';
 }
+  
+
 
 const timerDelay = 250;
 setInterval(() => {
