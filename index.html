@@ -112,8 +112,8 @@
     <div id="stage">
     </div>
     <script type="text/javascript">
-const circulation = 16;
-const totalInvestment = 1600;
+const circulation = 17;
+const totalInvestment = 1700;
 
 const coins = [
   {
@@ -191,6 +191,16 @@ const coins = [
     count: 123.1,
     cost: 75,
   },
+  {
+    name: 'DogeCoin',
+    count: 3000,
+    cost: 50.07,
+  },
+  {
+    name: 'ReddCoin',
+    count: 1500,
+    cost: 43.71,
+  }
 ];
 
 function round(value, decimals) {
@@ -218,8 +228,9 @@ const getStats = () => {
           const obj = objA[0];
 
           return {
+            name,
             '24h': obj.percent_change_24h,
-            '1h': obj.percent_change_1h,
+            // '1h': obj.percent_change_1h,
             '7d': obj.percent_change_7d,
             price_btc: obj.price_btc,
             price_usd: obj.price_usd,
